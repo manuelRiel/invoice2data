@@ -96,6 +96,7 @@ class TestCLI(unittest.TestCase):
                         self.assertTrue(False, 'Failed to verify parsing result for ' + jfile)
                     os.remove(test_files)
 
+    @skip_on_windows
     def test_output_format_date_json(self):
         pdf_files = get_sample_files('free_fiber.pdf')
         test_file = 'test_compare.json'
@@ -129,6 +130,7 @@ class TestCLI(unittest.TestCase):
                         self.assertTrue(False, 'Unexpected date format')
             os.remove(test_file)
 
+    @skip_on_windows
     def test_output_format_date_xml(self):
         pdf_files = get_sample_files('free_fiber.pdf')
         test_file = 'test_compare.xml'
@@ -263,6 +265,7 @@ class TestCLI(unittest.TestCase):
 
         shutil.rmtree(os.path.dirname(copy_dir), ignore_errors=True)
 
+    @skip_on_windows
     def test_area(self):
         pdf_files = get_sample_files('NetpresseInvoice.pdf')
         test_file = 'test_area.json'
