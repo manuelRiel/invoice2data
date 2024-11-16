@@ -11,6 +11,7 @@
 # https://docs.python.org/3.10/library/unittest.html#test-cases
 
 import os
+import sys
 
 try:
     from StringIO import StringIO  # noqa: F401
@@ -34,6 +35,10 @@ def have_pdfplumber():
 
 
 needs_pdfplumber = unittest.skipIf(not have_pdfplumber(), reason="requires pdfplumber\n")
+skip_on_windows = unittest.skipIf(
+    sys.platform.startswith("win"),
+    reason="Tesseract executable cannot be found in Windows test environment. FIXME",
+)
 
 
 def _extract_data_for_export():
@@ -108,6 +113,7 @@ class TestLIB(unittest.TestCase):
             print("Testing pdfplumber with file", file)
             extract_data(file, None, pdfplumber)
 
+    @skip_on_windows
     def test_tesseract_for_return(self):
         png_files = get_sample_files('.png')
         for file in png_files:

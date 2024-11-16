@@ -12,6 +12,7 @@
 
 import datetime
 import os
+import sys
 import json
 import shutil
 import csv
@@ -39,7 +40,10 @@ def have_ocrmypdf():
 
 
 needs_ocrmypdf = unittest.skipIf(not have_ocrmypdf(), reason="requires ocrmypdf")
-
+skip_on_windows = unittest.skipIf(
+    sys.platform.startswith("win"),
+    reason="Tesseract executable cannot be found in Windows test environment. FIXME",
+)
 
 class TestCLI(unittest.TestCase):
     def setUp(self):
@@ -74,6 +78,7 @@ class TestCLI(unittest.TestCase):
     # TODO: move result comparison to own test module.
     # TODO: parse output files instaed of comparing them byte-by-byte.
 
+    @skip_on_windows
     def test_content_json(self):
         input_files = get_sample_files(('.pdf', '.txt'))
         json_files = get_sample_files('.json')
@@ -91,6 +96,7 @@ class TestCLI(unittest.TestCase):
                         self.assertTrue(False, 'Failed to verify parsing result for ' + jfile)
                     os.remove(test_files)
 
+    @skip_on_windows
     def test_output_format_date_json(self):
         pdf_files = get_sample_files('free_fiber.pdf')
         test_file = 'test_compare.json'
@@ -124,6 +130,7 @@ class TestCLI(unittest.TestCase):
                         self.assertTrue(False, 'Unexpected date format')
             os.remove(test_file)
 
+    @skip_on_windows
     def test_output_format_date_xml(self):
         pdf_files = get_sample_files('free_fiber.pdf')
         test_file = 'test_compare.xml'
@@ -141,6 +148,7 @@ class TestCLI(unittest.TestCase):
                 self.assertTrue(False, 'Unexpected date format')
             os.remove(test_file)
 
+    @skip_on_windows
     def test_copy(self):
         # folder = pkg_resources.resource_filename(__name__, 'pdfs')
         directory = os.path.dirname("tests/copy_test/pdf/")
@@ -213,6 +221,7 @@ class TestCLI(unittest.TestCase):
                         )
         return data
 
+    @skip_on_windows
     def test_copy_with_default_filename_format(self):
         copy_dir = os.path.join('tests', 'copy_test', 'pdf')
         # make sure directory is deleted
@@ -234,6 +243,7 @@ class TestCLI(unittest.TestCase):
 
         shutil.rmtree(os.path.dirname(copy_dir), ignore_errors=True)
 
+    @skip_on_windows
     def test_copy_with_custom_filename_format(self):
         copy_dir = os.path.join('tests', 'copy_test', 'pdf')
         filename_format = "Custom Prefix {date} {invoice_number}.pdf"
@@ -255,6 +265,7 @@ class TestCLI(unittest.TestCase):
 
         shutil.rmtree(os.path.dirname(copy_dir), ignore_errors=True)
 
+    @skip_on_windows
     def test_area(self):
         pdf_files = get_sample_files('NetpresseInvoice.pdf')
         test_file = 'test_area.json'
@@ -274,6 +285,7 @@ class TestCLI(unittest.TestCase):
     # Where the pdf has to be ocr'd first
     # before any keywords can be matched
 
+    @skip_on_windows
     @needs_ocrmypdf
     def test_ocrmypdf(self):
         pdf_files = get_sample_files("saeco.pdf", exclude_input_specific=False)
@@ -303,6 +315,7 @@ class TestCLI(unittest.TestCase):
     # Test the fallback from pdf to text to ocrmypdf.
     # with ocrmypdf installed
 
+    @skip_on_windows
     @needs_ocrmypdf
     def test_fallback_with_ocrmypdf(self):
         pdf_files = get_sample_files("saeco.pdf", exclude_input_specific=False)
