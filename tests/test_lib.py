@@ -11,6 +11,7 @@
 # https://docs.python.org/3.10/library/unittest.html#test-cases
 
 import os
+import sys
 
 try:
     from StringIO import StringIO  # noqa: F401
