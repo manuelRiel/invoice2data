@@ -34,7 +34,7 @@ def have_pdfplumber():
 
 
 needs_pdfplumber = unittest.skipIf(not have_pdfplumber(), reason="requires pdfplumber\n")
-skip_on_windows = pytest.mark.skipif(
+skip_on_windows = unittest.skipif(
     sys.platform.startswith("win"),
     reason="Tesseract executable cannot be found in Windows test environment. FIXME",
 )
